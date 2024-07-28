@@ -7,9 +7,9 @@ Resources:
       DBSubnetGroupDescription: 'Subnet for Server2 VPC'
       DBSubnetGroupName: 'bridgeserver2-rds-subnet'
       SubnetIds:
-        - !ImportValue us-east-1-BridgeServer2-vpc-PrivateSubnet
-        - !ImportValue us-east-1-BridgeServer2-vpc-PrivateSubnet1
-        - !ImportValue us-east-1-BridgeServer2-vpc-PrivateSubnet2
+        - 'subnet-0c914eb7292a302fc'
+        - 'subnet-09790b48060420f4c'
+        - 'subnet-074665325c1b2aa25'
 Outputs:
   DBSubnetGroupName:
     Value: !Ref DBSubnetGroup

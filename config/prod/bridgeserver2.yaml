@@ -4,44 +4,35 @@ depedencies:
   - common/bridgeserver2-common.yaml
   - prod/bridgeserver2-db.yaml
 parameters:
-  AppDeployBucket: org-sagebridge-bridgeserver2-deployment-prod
+  AppDeployBucket: org-biaffectbridge-bridgeserver2-deployment-prod
   AppHealthcheckUrl: '/'
-  AttachmentBucket: org-sagebridge-attachment-prod
+  AttachmentBucket: org-biaffectbridge-attachment-prod
   AwsAutoScalingMaxSize: "2"
   AwsAutoScalingMinSize: "2"
   AwsEbHealthReportingSystem: enhanced
-  AwsSnsBounceNotificationEndpoint: bridge-bounce-notifications@sagebase.org
-  AwsSnsNotificationEndpoint: bridgeops@sagebase.org
+  AwsSnsBounceNotificationEndpoint: biaffect-bridge-bounce-notifications@googlegroups.com
+  AwsSnsNotificationEndpoint: biaffect-bridge-ops@googlegroups.com
   BootstrapAdminEmail: !ssm /bridgeserver2-prod/BootstrapAdminEmail
   BootstrapAdminPassword: !ssm /bridgeserver2-prod/BootstrapAdminPassword
   BridgeEnv: prod
   BridgeDBStackName: bridgeserver2-db-prod
   BridgeHealthcodeRedisKey: !ssm /bridgeserver2-prod/BridgeHealthcodeRedisKey
-  BridgeUser: heroku
+  BridgeUser: biaffect
   BucketSuffix: prod
   DNSHostname: bridgeserver2-prod
-  DNSDomain: sagebridge.org
+  DNSDomain: biaffectbridge.org
   EC2InstanceType: t3a.medium
-  EmailUnsubscribeToken: !ssm /bridgeserver2-common/EmailUnsubscribeToken
   Env: production
-  ExporterRequestSqsQueueUrl: https://sqs.us-east-1.amazonaws.com/649232250620/Bridge-EX-Request-prod
+  ExporterRequestSqsQueueUrl: https://sqs.us-east-1.amazonaws.com/381492192635/Bridge-EX-Request-prod
   ExporterSynapseAccessToken: !ssm /bridgeserver2-prod/ExporterSynapseAccessToken
   ExporterSynapseUser: !ssm /bridgeserver2-prod/ExporterSynapseUser
   HibernateConnectionPassword: !ssm /bridgeserver2-prod/HibernateConnectionPassword
   HibernateConnectionUsername: !ssm /bridgeserver2-prod/HibernateConnectionUsername
-  HibernateConnectionUsessl: 'true'
-  HostPostfix: .sagebridge.org
-  NewRelicAppName: bridgeserver2-prod
-  NewRelicLicenseKey: !ssm /infra/NewRelicLicenseKey
-  SesNotificationTopicArn: arn:aws:sns:us-east-1:649232250620:SNSBounces
+  HibernateConnectionUsessl: 'false'
+  HostPostfix: .biaffectbridge.org
+  SesNotificationTopicArn: arn:aws:sns:us-east-1:381492192635:SNSBounces
   SynapseAccessToken: !ssm /bridgeserver2-prod/SynapseAccessToken
   SynapseUser: !ssm /bridgeserver2-prod/SynapseUser
   SynapseOAuthClientId: !ssm /bridgeserver2-prod/SynapseOAuthClientId
   SynapseOAuthClientSecret: !ssm /bridgeserver2-prod/SynapseOAuthClientSecret
-  UddSqsQueueUrl: https://sqs.us-east-1.amazonaws.com/649232250620/Bridge-WorkerPlatform-Request-prod
-  CrcGeoCodeApiKey: !ssm /bridgeserver2-prod/CrcGeoCodeApiKey
-  CuimcTestUsername: !ssm /bridgeserver2-common/CuimcTestUsername
-  CuimcTestPassword: !ssm /bridgeserver2-common/CuimcTestPassword
-  CuimcProdUsername: !ssm /bridgeserver2-common/CuimcProdUsername
-  CuimcProdPassword: !ssm /bridgeserver2-common/CuimcProdPassword
-  GbfApiKey: !ssm /bridgeserver2-common/GbfApiKey
+  UddSqsQueueUrl: https://sqs.us-east-1.amazonaws.com/381492192635/Bridge-WorkerPlatform-Request-prod

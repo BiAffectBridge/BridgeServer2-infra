@@ -51,24 +51,6 @@ Parameters:
     Default: heroku
   BucketSuffix:
     Type: String
-  CrcGeoCodeApiKey:
-    Type: String
-    NoEcho: true
-  GbfApiKey:
-    Type: String
-    NoEcho: true
-  CuimcTestUsername:
-    Type: String
-    NoEcho: true
-  CuimcTestPassword:
-    Type: String
-    NoEcho: true
-  CuimcProdUsername:
-    Type: String
-    NoEcho: true
-  CuimcProdPassword:
-    Type: String
-    NoEcho: true
   DNSDomain:
     Type: String
     Description: DNS Domain name for deployment
@@ -80,9 +62,6 @@ Parameters:
     Type: String
     Description: Instance type to use for Elastic Beanstalk Instances
     Default: t2.small
-  EmailUnsubscribeToken:
-    Type: String
-    NoEcho: true
   Env:
     Type: String
     Default: develop
@@ -112,11 +91,6 @@ Parameters:
     ConstraintDescription: must be either true or false
   HostPostfix:
     Type: String
-  NewRelicAppName:
-    Type: String
-  NewRelicLicenseKey:
-    Type: String
-    NoEcho: true
   RollingUpdateType:
     Type: String
     Default: Time
@@ -150,7 +124,8 @@ Parameters:
     Type: String
   UseHttpsForwarding:
     Type: String
-    Default: true
+    # Change this back to true when we have an SSL Cert
+    Default: false   
     AllowedValues:
       - true
       - false
@@ -183,7 +158,7 @@ Resources:
     Type: 'AWS::ElasticBeanstalk::ConfigurationTemplate'
     Properties:
       ApplicationName: !ImportValue us-east-1-bridgeserver2-common-BeanstalkAppName
-      SolutionStackName: '64bit Amazon Linux 2 v4.2.11 running Tomcat 8.5 Corretto 8'
+      SolutionStackName: '64bit Amazon Linux 2 v4.6.0 running Tomcat 8.5 Corretto 8'
       OptionSettings:
         # EB environment options
         - Namespace: 'aws:autoscaling:asg'
@@ -222,23 +197,25 @@ Resources:
         - Namespace: 'aws:elasticbeanstalk:command'
           OptionName: BatchSize
           Value: '1'
+        # Public,Public1,Public2
         - Namespace: 'aws:ec2:vpc'
           OptionName: ELBSubnets
           Value: !Join
             - ','
-            - - !ImportValue us-east-1-BridgeServer2-vpc-PublicSubnet
-              - !ImportValue us-east-1-BridgeServer2-vpc-PublicSubnet1
-              - !ImportValue us-east-1-BridgeServer2-vpc-PublicSubnet2
+            - - 'subnet-00e1112781e2100b0'
+              - 'subnet-05a42a6abdb678332'
+              - 'subnet-0717a03d09d1299dc'
+        # Private,Private1,Private2
         - Namespace: 'aws:ec2:vpc'
           OptionName: Subnets
           Value: !Join
             - ','
-            - - !ImportValue us-east-1-BridgeServer2-vpc-PrivateSubnet
-              - !ImportValue us-east-1-BridgeServer2-vpc-PrivateSubnet1
-              - !ImportValue us-east-1-BridgeServer2-vpc-PrivateSubnet2
+            - - 'subnet-0c914eb7292a302fc'
+              - 'subnet-09790b48060420f4c'
+              - 'subnet-074665325c1b2aa25'
         - Namespace: 'aws:ec2:vpc'
           OptionName: VPCId
-          Value: !ImportValue us-east-1-BridgeServer2-vpc-VPCId
+          Value: 'vpc-08383f78519fe72ef'
         - Namespace: 'aws:ec2:vpc'
           OptionName: AssociatePublicIpAddress
           Value: 'false'
@@ -254,9 +231,6 @@ Resources:
         - Namespace: 'aws:elasticbeanstalk:cloudwatch:logs'
           OptionName: RetentionInDays
           Value: '90'
-        - Namespace: 'aws:elasticbeanstalk:container:tomcat:jvmoptions'
-          OptionName: JVM Options
-          Value: '-Dnewrelic.config.file=/etc/newrelic.yml -javaagent:/usr/local/lib/newrelic/newrelic-agent.jar'
         - Namespace: 'aws:elasticbeanstalk:container:tomcat:jvmoptions'
           OptionName: Xmx
           Value: '1024m'
@@ -309,16 +283,6 @@ Resources:
         - Namespace: 'aws:elbv2:listener:default'
           OptionName: Protocol
           Value: HTTP
-        - Namespace: 'aws:elbv2:listener:443'
-          OptionName: Protocol
-          Value: HTTPS
-        - Namespace: 'aws:elbv2:listener:443'
-          OptionName: SSLCertificateArns
-          Value: !ImportValue us-east-1-bridgeserver2-common-SSLCertificate
-        # ELB cipher and TLS protocol versions
-        - Namespace: 'aws:elbv2:listener:443'
-          OptionName: SSLPolicy
-          Value: ELBSecurityPolicy-TLS-1-2-2017-01
         # Application environment options
         - Namespace: 'aws:elasticbeanstalk:application:environment'
           OptionName: admin.email
@@ -354,9 +318,6 @@ Resources:
               - !GetAtt ElasticacheCluster.RedisEndpoint.Address
               - ':'
               - !GetAtt ElasticacheCluster.RedisEndpoint.Port
-        - Namespace: 'aws:elasticbeanstalk:application:environment'
-          OptionName: email.unsubscribe.token
-          Value: !Ref EmailUnsubscribeToken
         - Namespace: 'aws:elasticbeanstalk:application:environment'
           OptionName: exporter.request.sqs.queue.url
           Value: !Ref ExporterRequestSqsQueueUrl
@@ -395,12 +356,6 @@ Resources:
               - '.host.postfix'
           Value: !Ref HostPostfix
         - Namespace: 'aws:elasticbeanstalk:application:environment'
-          OptionName: NEW_RELIC_APP_NAME
-          Value: !Ref NewRelicAppName
-        - Namespace: 'aws:elasticbeanstalk:application:environment'
-          OptionName: NEW_RELIC_LICENSE_KEY
-          Value: !Ref NewRelicLicenseKey
-        - Namespace: 'aws:elasticbeanstalk:application:environment'
           OptionName: ses.notification.topic.arn
           Value: !Ref SesNotificationTopicArn
         - Namespace: 'aws:elasticbeanstalk:application:environment'
@@ -421,24 +376,6 @@ Resources:
         - Namespace: 'aws:elasticbeanstalk:application:environment'
           OptionName: use.https.forwarding
           Value: !Ref UseHttpsForwarding
-        - Namespace: 'aws:elasticbeanstalk:application:environment'
-          OptionName: crc.geocode.api.key
-          Value: !Ref CrcGeoCodeApiKey
-        - Namespace: 'aws:elasticbeanstalk:application:environment'
-          OptionName: cuimc.test.username
-          Value: !Ref CuimcTestUsername
-        - Namespace: 'aws:elasticbeanstalk:application:environment'
-          OptionName: cuimc.test.password
-          Value: !Ref CuimcTestPassword
-        - Namespace: 'aws:elasticbeanstalk:application:environment'
-          OptionName: cuimc.prod.username
-          Value: !Ref CuimcProdUsername
-        - Namespace: 'aws:elasticbeanstalk:application:environment'
-          OptionName: cuimc.prod.password
-          Value: !Ref CuimcProdPassword
-        - Namespace: 'aws:elasticbeanstalk:application:environment'
-          OptionName: gbf.api.key
-          Value: !Ref GbfApiKey
   AWSEBEnvironment:
     Type: 'AWS::ElasticBeanstalk::Environment'
     Properties:
@@ -457,7 +394,7 @@ Resources:
         - '-'
         - - !Ref 'AWS::StackName'
           - ElasticacheSecurityGroup
-      VpcId: !ImportValue us-east-1-BridgeServer2-vpc-VPCId
+      VpcId: 'vpc-08383f78519fe72ef'
       SecurityGroupIngress:
         - IpProtocol: tcp
           FromPort: 6379
@@ -471,16 +408,17 @@ Resources:
           - - !Ref 'AWS::StackName'
             - ElasticacheSubnetGroup
       SubnetIds:
-        - !ImportValue us-east-1-BridgeServer2-vpc-PublicSubnet
-        - !ImportValue us-east-1-BridgeServer2-vpc-PublicSubnet1
-        - !ImportValue us-east-1-BridgeServer2-vpc-PublicSubnet2
-        - !ImportValue us-east-1-BridgeServer2-vpc-PrivateSubnet
-        - !ImportValue us-east-1-BridgeServer2-vpc-PrivateSubnet1
-        - !ImportValue us-east-1-BridgeServer2-vpc-PrivateSubnet2
+        - 'subnet-00e1112781e2100b0'
+        - 'subnet-05a42a6abdb678332'
+        - 'subnet-0717a03d09d1299dc'
+        - 'subnet-0c914eb7292a302fc'
+        - 'subnet-09790b48060420f4c'
+        - 'subnet-074665325c1b2aa25'
   ElasticacheCluster:
     Type: 'AWS::ElastiCache::CacheCluster'
     Properties:
       Engine: redis
+      EngineVersion: '7.0'
       CacheNodeType: cache.t2.micro
       NumCacheNodes: 1
       VpcSecurityGroupIds:
@@ -494,7 +432,6 @@ Resources:
         - - !Ref 'AWS::StackName'
           - ElasticacheReplicationGroup
       AutomaticFailoverEnabled: false
-      EngineVersion: '6.0'
       PrimaryClusterId: !Ref ElasticacheCluster
       ReplicasPerNodeGroup: 1
   AWSEC2SecurityGroup:
@@ -505,7 +442,7 @@ Resources:
         - - !Ref 'AWS::StackName'
           - AWSEC2SecurityGroup
       GroupDescription: EC2 Security Group
-      VpcId: !ImportValue us-east-1-BridgeServer2-vpc-VPCId
+      VpcId: 'vpc-08383f78519fe72ef'
       SecurityGroupIngress:
         - IpProtocol: tcp
           FromPort: 80
@@ -524,7 +461,7 @@ Resources:
     Type: 'AWS::EC2::SecurityGroup'
     Properties:
       GroupDescription: Load Balancer Security Group
-      VpcId: !ImportValue us-east-1-BridgeServer2-vpc-VPCId
+      VpcId: 'vpc-08383f78519fe72ef'
       SecurityGroupIngress:
         - CidrIp: 0.0.0.0/0
           FromPort: 443
@@ -904,7 +841,7 @@ Resources:
                   - - 'arn:aws:iam::'
                     - !Ref AWS::AccountId
                     - ':root'
-                - !ImportValue us-east-1-bootstrap-CfServiceRoleArn
+                - 'arn:aws:iam::381492192635:role/cf.service'
             Action:
               - "kms:Create*"
               - "kms:Describe*"
@@ -929,7 +866,7 @@ Resources:
                   - - 'arn:aws:iam::'
                     - !Ref AWS::AccountId
                     - ':root'
-                - !ImportValue us-east-1-bootstrap-CfServiceRoleArn
+                - 'arn:aws:iam::381492192635:role/cf.service'
                 - !GetAtt AWSIAMRole.Arn
                 - !ImportValue us-east-1-bridgeserver2-common-BeanstalkServiceRoleArn
             Action:

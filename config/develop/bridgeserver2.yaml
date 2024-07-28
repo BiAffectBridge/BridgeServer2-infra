@@ -4,44 +4,35 @@ depedencies:
   - common/bridgeserver2-common.yaml
   - develop/bridgeserver2-db.yaml
 parameters:
-  AppDeployBucket: org-sagebridge-bridgeserver2-deployment-devdevelop
+  AppDeployBucket: org-biaffectbridge-bridgeserver2-deployment-develop
   AppHealthcheckUrl: '/'
-  AttachmentBucket: org-sagebridge-attachment-devdevelop
+  AttachmentBucket: org-biaffectbridge-attachment-develop
   AwsAutoScalingMaxSize: '1'
   AwsAutoScalingMinSize: '1'
   AwsEbHealthReportingSystem: enhanced
-  AwsSnsBounceNotificationEndpoint: bridgepf-develop-bounce-notifications@sagebase.org
-  AwsSnsNotificationEndpoint: bridgepf-develop@sagebase.org
+  AwsSnsBounceNotificationEndpoint: biaffect-bridge-bounce-notifications-develop@googlegroups.com
+  AwsSnsNotificationEndpoint: biaffect-bridge-ops-develop@googlegroups.com
   BootstrapAdminEmail: !ssm /bridgeserver2-develop/BootstrapAdminEmail
   BootstrapAdminPassword: !ssm /bridgeserver2-develop/BootstrapAdminPassword
   BridgeEnv: dev
   BridgeDBStackName: bridgeserver2-db-develop
   BridgeHealthcodeRedisKey: !ssm /bridgeserver2-develop/BridgeHealthcodeRedisKey
-  BridgeUser: heroku
-  BucketSuffix: devdevelop
-  DNSHostname: bridgeserver2-devdevelop
-  DNSDomain: sagebridge.org
+  BridgeUser: biaffect
+  BucketSuffix: develop
+  DNSHostname: bridgeserver2-develop
+  DNSDomain: biaffectbridge.org
   EC2InstanceType: t3a.medium
-  EmailUnsubscribeToken: !ssm /bridgeserver2-common/EmailUnsubscribeToken
   Env: develop
-  ExporterRequestSqsQueueUrl: https://sqs.us-east-1.amazonaws.com/420786776710/Bridge-EX-Request-develop
+  ExporterRequestSqsQueueUrl: https://sqs.us-east-1.amazonaws.com/381492192635/Bridge-EX-Request-develop
   ExporterSynapseAccessToken: !ssm /bridgeserver2-develop/ExporterSynapseAccessToken
   ExporterSynapseUser: !ssm /bridgeserver2-develop/ExporterSynapseUser
   HibernateConnectionPassword: !ssm /bridgeserver2-develop/HibernateConnectionPassword
   HibernateConnectionUsername: !ssm /bridgeserver2-develop/HibernateConnectionUsername
-  HibernateConnectionUsessl: 'true'
-  HostPostfix: -devdevelop.sagebridge.org
-  NewRelicAppName: bridgeserver2-devdevelop
-  NewRelicLicenseKey: !ssm /infra/NewRelicLicenseKey
-  SesNotificationTopicArn: arn:aws:sns:us-east-1:420786776710:SNSBounces
+  HibernateConnectionUsessl: 'false'
+  HostPostfix: -develop.biaffectbridge.org
+  SesNotificationTopicArn: arn:aws:sns:us-east-1:381492192635:SNSBounces-develop
   SynapseAccessToken: !ssm /bridgeserver2-develop/SynapseAccessToken
   SynapseUser: !ssm /bridgeserver2-develop/SynapseUser
   SynapseOAuthClientId: !ssm /bridgeserver2-develop/SynapseOAuthClientId
   SynapseOAuthClientSecret: !ssm /bridgeserver2-develop/SynapseOAuthClientSecret
-  UddSqsQueueUrl: https://sqs.us-east-1.amazonaws.com/420786776710/Bridge-WorkerPlatform-Request-develop
-  CrcGeoCodeApiKey: !ssm /bridgeserver2-develop/CrcGeoCodeApiKey
-  CuimcTestUsername: !ssm /bridgeserver2-common/CuimcTestUsername
-  CuimcTestPassword: !ssm /bridgeserver2-common/CuimcTestPassword
-  CuimcProdUsername: !ssm /bridgeserver2-common/CuimcProdUsername
-  CuimcProdPassword: !ssm /bridgeserver2-common/CuimcProdPassword
-  GbfApiKey: !ssm /bridgeserver2-common/GbfApiKey
+  UddSqsQueueUrl: https://sqs.us-east-1.amazonaws.com/381492192635/Bridge-WorkerPlatform-Request-develop

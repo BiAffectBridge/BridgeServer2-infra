@@ -1,10 +1,5 @@
 Description: Common resources for all stacks of BridgeServer2 Application
 AWSTemplateFormatVersion: 2010-09-09
-Parameters:
-  DNSDomainName:
-    Description: DNS Domain name for Bridge Server
-    Type: String
-    Default: 'sagebridge.org'
 Resources:
   BeanstalkServiceRole:
     Type: 'AWS::IAM::Role'
@@ -37,20 +32,6 @@ Resources:
             DeleteSourceFromS3: true
             Enabled: true
             MaxAgeInDays: 90
-  SSLCertificate:
-    Type: AWS::CertificateManager::Certificate
-    Properties:
-      DomainName: !Join
-        - '.'
-        - - '*'
-          - !Ref DNSDomainName
-      DomainValidationOptions:
-        - DomainName: !Join
-            - '.'
-            - - '*'
-              - !Ref DNSDomainName
-          ValidationDomain: !Ref DNSDomainName
-      ValidationMethod: DNS
   # KMS Keys
   AWSKmsKey:
     Type: "AWS::KMS::Key"
@@ -72,7 +53,7 @@ Resources:
                   - - 'arn:aws:iam::'
                     - !Ref AWS::AccountId
                     - ':root'
-                - !ImportValue us-east-1-bootstrap-CfServiceRoleArn
+                - 'arn:aws:iam::381492192635:role/cf.service'
             Action:
               - "kms:Create*"
               - "kms:Describe*"
@@ -97,7 +78,7 @@ Resources:
                   - - 'arn:aws:iam::'
                     - !Ref AWS::AccountId
                     - ':root'
-                - !ImportValue us-east-1-bootstrap-CfServiceRoleArn
+                - 'arn:aws:iam::381492192635:role/cf.service'
             Action:
               - "kms:Encrypt"
               - "kms:Decrypt"
@@ -127,10 +108,6 @@ Outputs:
     Value: !GetAtt BeanstalkServiceRole.Arn
     Export:
       Name: !Sub '${AWS::Region}-${AWS::StackName}-BeanstalkServiceRoleArn'
-  SSLCertificate:
-    Value: !Ref SSLCertificate
-    Export:
-      Name: !Sub '${AWS::Region}-${AWS::StackName}-SSLCertificate'
   AWSKmsKey:
     Value: !Ref AWSKmsKey
     Export:

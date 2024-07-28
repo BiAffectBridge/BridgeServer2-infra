@@ -6,7 +6,6 @@ fast_finish: true
 branches:
   only:
   - develop
-  - uat
   - prod
 install:
   - ./setup_aws_cli.sh || travis_terminate 1
