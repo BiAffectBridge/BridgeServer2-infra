@@ -20,7 +20,7 @@ parameters:
   BridgeUser: biaffect
   BucketSuffix: prod
   DNSHostname: bridgeserver2-prod
-  DNSDomain: aws.biaffectbridge.org
+  DNSDomain: biaffectbridge.org
   EC2InstanceType: t3a.medium
   Env: production
   ExporterRequestSqsQueueUrl: https://sqs.us-east-1.amazonaws.com/381492192635/Bridge-EX-Request-prod
