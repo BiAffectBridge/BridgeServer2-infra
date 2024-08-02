@@ -488,12 +488,20 @@ Resources:
         config:
           ignore_checks:
             - E3012
+    # If CreateR53Record is set true, then Record is created.
+    # CreateR53Record is true when BridgeEnv is prod
     Condition: CreateR53Record
     Properties:
+      # Name of the hosted zone that you want to create records in
+      # If AWS CloudFormation cannot find a hosted zone with a matching domain name, AWS CloudFormation will not create the stack.
+      # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-route53-recordset.html
       HostedZoneName: !Join
         - ''
         - - !Ref DNSDomain
           - .
+      # Name of a record in the specified hosted zone. Full domain name for the DNS record being created.
+      # If DNSHostname is bridgeserver2-prod and DNSDomain is biaffectbridge.org,
+      # the Name will be bridgeserver2-prod.biaffectbridge.org.
       Name: !Join
         - ''
         - - !Ref DNSHostname
