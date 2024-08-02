@@ -20,7 +20,7 @@ parameters:
   BridgeUser: biaffect
   BucketSuffix: develop
   DNSHostname: bridgeserver2-develop
-  DNSDomain: biaffectbridge.org
+  DNSDomain: biaffectbridge.com
   EC2InstanceType: t3a.medium
   Env: develop
   ExporterRequestSqsQueueUrl: https://sqs.us-east-1.amazonaws.com/381492192635/Bridge-EX-Request-develop
@@ -29,7 +29,7 @@ parameters:
   HibernateConnectionPassword: !ssm /bridgeserver2-develop/HibernateConnectionPassword
   HibernateConnectionUsername: !ssm /bridgeserver2-develop/HibernateConnectionUsername
   HibernateConnectionUsessl: 'false'
-  HostPostfix: -develop.biaffectbridge.org
+  HostPostfix: -develop.biaffectbridge.com
   SesNotificationTopicArn: arn:aws:sns:us-east-1:381492192635:SNSBounces-develop
   SynapseAccessToken: !ssm /bridgeserver2-develop/SynapseAccessToken
   SynapseUser: !ssm /bridgeserver2-develop/SynapseUser

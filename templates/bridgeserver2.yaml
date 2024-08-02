@@ -500,8 +500,8 @@ Resources:
         - - !Ref DNSDomain
           - .
       # Name of a record in the specified hosted zone. Full domain name for the DNS record being created.
-      # If DNSHostname is bridgeserver2-prod and DNSDomain is biaffectbridge.org,
-      # the Name will be bridgeserver2-prod.biaffectbridge.org.
+      # If DNSHostname is bridgeserver2-prod and DNSDomain is biaffectbridge.com,
+      # the Name will be bridgeserver2-prod.biaffectbridge.com.
       Name: !Join
         - ''
         - - !Ref DNSHostname

@@ -20,7 +20,7 @@ parameters:
   BridgeUser: biaffect
   BucketSuffix: prod
   DNSHostname: bridgeserver2-prod
-  DNSDomain: biaffectbridge.org
+  DNSDomain: biaffectbridge.com
   EC2InstanceType: t3a.medium
   Env: production
   ExporterRequestSqsQueueUrl: https://sqs.us-east-1.amazonaws.com/381492192635/Bridge-EX-Request-prod
@@ -29,7 +29,7 @@ parameters:
   HibernateConnectionPassword: !ssm /bridgeserver2-prod/HibernateConnectionPassword
   HibernateConnectionUsername: !ssm /bridgeserver2-prod/HibernateConnectionUsername
   HibernateConnectionUsessl: 'false'
-  HostPostfix: .biaffectbridge.org
+  HostPostfix: .biaffectbridge.com
   SesNotificationTopicArn: arn:aws:sns:us-east-1:381492192635:SNSBounces
   SynapseAccessToken: !ssm /bridgeserver2-prod/SynapseAccessToken
   SynapseUser: !ssm /bridgeserver2-prod/SynapseUser
